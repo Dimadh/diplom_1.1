@@ -26,3 +26,4 @@ Route::post('/take_prog', ['uses' => 'HomeController@search' , 'as' => 'issue'])
 Route::post('/send_task', ['uses' => 'HomeController@send' , 'as' => 'issue1']);
 Route::post('/update_task', ['uses' => 'HomeController@updatetask' , 'as' => 'issue2']);
 Route::post('/create_task', ['uses' => 'HomeController@createAndsend' , 'as' => 'issue3']);
+/*Route::post('/create_task', ['uses' => 'HomeController@searchTask' , 'as' => 'issue3']);*/

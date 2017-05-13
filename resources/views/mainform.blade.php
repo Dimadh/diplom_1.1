@@ -9,7 +9,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <title>{{ $title }} </title>
+
+    <title>Jira</title>
 </head>
 <style>
     #take_programmer{
@@ -52,7 +53,24 @@
     <div class="panel panel-primary">
         <div class="panel-heading">Take Programmer</div>
         <div class="panel-body">
-
+            <div class="row">
+            @if(isset($users))
+                @foreach($users as $user)
+            <div class="col-md-6">
+                <label>Name:</label>
+                <div>
+                {{$user->name}}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label>Email:</label>
+                <div>
+                    {{$user->email}}
+                </div>
+            </div>
+                    @endforeach
+                @endif
+        </div>
         </div>
         <div class="form-group">
             <input class="btn btn-primary" type="submit" id="take_programmer" name="take_programmer" value="Take from Jira">
@@ -66,6 +84,7 @@
         <div class="panel-heading">Send Task</div>
         <div class="panel-body">
             <div class="row">
+                @if(isset($tasks))
                 @foreach($tasks as $task)
                 <div class="col-md-3">
                     <label>Project:</label>
@@ -94,7 +113,8 @@
                         <option>Epic</option>
                     </select>
                 </div>
-                    @endforeach
+                @endforeach
+                @endif
             </div>
         </div>
         <div class="form-group">
@@ -115,7 +135,15 @@
                     <div class="panel-body">
                         <div class="form-group">
                             <label for="create_project">Project:</label>
-                            <input class="form-control" type="text" placeholder="project" id="create_project" name="create_project">
+                            {{--<input class="form-control" type="text" placeholder="project" id="create_project" name="create_project" value="{{$project->key}}">--}}
+
+                            <select class="form-control" id="create_project" name="create_project">
+                                @if(isset($projects))
+                                    @foreach($projects as $project)
+                                <option>{{$project->key}}</option>
+                                    @endforeach
+                                @endif
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="create_summary">Summary:</label>
@@ -134,6 +162,7 @@
                                 <option>Epic</option>
                             </select>
                         </div>
+
                     </div>
                     <div class="form-group">
                         <input class="btn btn-primary" type="submit" id="create_task" name="create_task" value="Create Task">
