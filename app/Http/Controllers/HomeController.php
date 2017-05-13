@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 use App\Jira;
 use App\JiraProgrammer;
+use App\JiraSearch;
 use App\Programmer;
 use App\Task;
 use App\User;
@@ -37,11 +38,30 @@ class HomeController extends Controller
     }
 
     public function mainform(){
-        $data=[
-            'title' => 'Task'
+
+        $response_project = JiraSearch::search();
+        $data_project =[
+            'projects' => $response_project
+        ];
+
+        $response =[];
+        $response_1 = JiraProgrammer::search();
+        for ($i = 0 ; $i < count($response_1) ;) {
+            $d = new class{};
+            $d->name = $response_1[$i];
+            $d->email = $response_1[$i + 1];
+
+            array_push($response,$d);
+            $i = $i + 2;
+        //dd($response_1[$i]);
+    }
+    dd($response);
+        $data_Res = [
+            'users' => $response
         ];
         $tasks = Task::select(['id','project','summary','description'])->get();
-        return view('mainform' , $data)->with(['tasks'=> $tasks]);;
+        return view('mainform' , $data_project , $data_Res)->with(['tasks'=> $tasks]);
+
     }
     /**
      * Show the form for creating a new resource.
@@ -60,11 +80,10 @@ class HomeController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($data);
-        /*      $customer->name = $request->name;
-                $customer->email = $request->email;
-                $customer->password = $request->password;
-                $customer->remember_token = $request->remember_token;*/
+        /*$customer->name = $request->name;
+        $customer->email = $request->email;
+        $customer->password = $request->password;
+        $customer->remember_token = $request->remember_token;*/
         $data = $request->all();
         $customer = new User();
         $customer->fill($data);
@@ -132,13 +151,20 @@ class HomeController extends Controller
     }
 
     public function search(){
-        /*$response = JiraProgrammer::search( 'project = YourProject AND
-                                        labels = somelabel' );*/
-        $response = JiraProgrammer::search( 'key = dima AND 
-                                        username = Dima AND
-                                        emailAddress = hanzha@mail.ru' );
-        return redirect ('/task');
+        $response = JiraProgrammer::search();
+        $data_Res =[
+            'users' => $response
+        ];
+
+        $response_project = JiraSearch::search();
+        $data_project =[
+            'projects' => $response_project
+        ];
+
+        $tasks = Task::select(['id','project','summary','description'])->get();
+        return view ('mainform' , $data_Res, $data_project )->with(['tasks'=> $tasks]);
     }
+
     /**
      * Display the specified resource.
      *

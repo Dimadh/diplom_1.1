@@ -9,6 +9,8 @@
 namespace App;
 
 
+use PhpParser\Node\Expr\Array_;
+
 class JiraProgrammer
 {
     /**
@@ -17,20 +19,30 @@ class JiraProgrammer
      * @param null $jql
      * @return mixed
      */
-    public static function search( $jql = NULL )
+    public static function search()
     {
-        $data   = json_encode( array( 'jql' => $jql ) );
-        $result = self::request( 'search', $data );
-        return json_decode( $result );
+        $items = array("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o",
+                        "p","q","r","s","t","u","v","w","x","y","z");
+        $user = array();
+        foreach ($items as $item) {
+            $result = json_decode(self::request('user/search?username=' . $item));
+            foreach ($result as $add_result) {
+                    array_push($user, $add_result->name);
+                    array_push($user, $add_result ->emailAddress);
+                }
+           }
+        $concut_user = array_unique($user);
+        //dd($concut_user);
+        return $concut_user;
     }
 
-    private static function request( $request, $data, $is_post = 0, $is_put = 0 )
+
+    private static function request( $request, $is_post = 0, $is_put = 0 )
     {
         $ch = curl_init();
         curl_setopt_array( $ch, array(
-            CURLOPT_URL            => config( 'jira.url' ) . '/rest/api/2/user?username=' /*. $request*/,
+            CURLOPT_URL            => config( 'jira.url' ) . '/rest/api/2/' .$request,
             CURLOPT_USERPWD        => config( 'jira.username' ) . ':' . config( 'jira.password' ),
-            CURLOPT_POSTFIELDS     => $data,
             CURLOPT_HTTPHEADER     => array( 'Content-type: application/json' ),
             CURLOPT_RETURNTRANSFER => 1,
         ) );
@@ -43,7 +55,6 @@ class JiraProgrammer
             curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, 'PUT' );
         }
         $response = curl_exec( $ch );
-        dd($response);
         curl_close( $ch );
         return $response;
     }
