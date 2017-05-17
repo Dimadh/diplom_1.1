@@ -7,6 +7,9 @@ class Programmer extends Model
     //
     use Notifiable;
     protected $fillable = [
-        'name','second_name','email','specialization','rank',
+        'name','email',
     ];
+    /*protected $fillable = [
+        'name','second_name','email','specialization','rank',
+    ];*/
 }

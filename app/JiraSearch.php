@@ -11,7 +11,7 @@ namespace App;
 
 class JiraSearch
 {
-    public static function search( $jql = NULL )
+    public static function search()
     {
         $projetc = array();
         $result = json_decode(self::request( 'project' ));

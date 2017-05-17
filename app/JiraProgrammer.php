@@ -29,10 +29,10 @@ class JiraProgrammer
             foreach ($result as $add_result) {
                     array_push($user, $add_result->name);
                     array_push($user, $add_result ->emailAddress);
+                    array_push($user, $add_result ->key);
                 }
            }
         $concut_user = array_unique($user);
-        //dd($concut_user);
         return $concut_user;
     }
 
