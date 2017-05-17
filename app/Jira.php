@@ -19,15 +19,6 @@ class Jira
      * @return mixed
      */
 
-    public static function search( $jql = NULL )
-    {
-        $projetc = array();
-        $result = json_decode(self::request( 'project' ));
-        foreach ($result as $project_result)
-            array_push($projetc , $project_result);
-        return $projetc;
-    }
-
 
     public static function create( array $data )
     {
@@ -80,7 +71,6 @@ class Jira
             curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, 'PUT' );
         }
         $response = curl_exec( $ch );
-        //dd($response);
         curl_close( $ch );
         return $response;
     }
