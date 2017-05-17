@@ -15,6 +15,7 @@
     return view('welcome');
 });*/
 
+
 Route::get('/', ['uses' => 'HomeController@autorisation' , 'as' =>'home1']);
 Route::get('/autorisation', ['uses' => 'HomeController@index' , 'as' =>'home']);
 Route::post('/autorisation', 'HomeController@storer')->name('programmer');

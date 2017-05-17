@@ -26,7 +26,7 @@
 <div class="container">
     <div class="col-md-2"></div>
     <div class="col-md-8">
-    <form action="http://localhost/diplom_1.1/public/" method="POST" id="programmers">
+    <form action="http://localhost/diplom_1.1/public/autorisation" method="POST" id="programmers">
         <div class="panel panel-primary">
             <div class="panel-heading" align="center">Add Programmer</div>
             <div class="panel-body">
@@ -59,7 +59,7 @@
 
     </form>
 
-    <form action="http://localhost/diplom_1.1/public/" method="POST" id="tasks">
+    <form action="http://localhost/diplom_1.1/public/autorisation" method="POST" id="tasks">
         <div class="panel panel-primary">
             <div class="panel-heading" align="center">Add Task</div>
             <div class="panel-body">
