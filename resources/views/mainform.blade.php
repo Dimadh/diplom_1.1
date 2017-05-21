@@ -44,7 +44,7 @@
                 <li><a href="#update_tasks">Update</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="http://localhost/diplom_1.1/public/autorisation"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
+                <li><a href="http://localhost/diplom_1.1/public/"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
             </ul>
         </div>
     </div>
@@ -56,24 +56,32 @@
             <div class="row">
             @if(isset($users))
                 @foreach($users as $user)
-            <div class="col-md-6">
+            <div class="col-md-5">
                 <label>Name:</label>
                 <div>
                 {{$user->name}}
+                    <input type="hidden" name="name" value="{{$user->name}}">
                 </div>
             </div>
             <div class="col-md-6">
                 <label>Email:</label>
                 <div>
                     {{$user->email}}
+                    <input type="hidden" name="email" value="{{$user->email}}">
                 </div>
             </div>
+             <div class="col-md-1">
+                 <label for="select_programmer">Select:</label>
+                 <div>
+                    <input type="checkbox" class="form-control" name="select_programmer" id="select_programmer">
+                 </div>
+             </div>
                     @endforeach
                 @endif
         </div>
         </div>
         <div class="form-group">
-            <input class="btn btn-primary" type="submit" id="take_programmer" name="take_programmer" value="Take from Jira">
+            <input class="btn btn-primary" type="submit" id="take_programmer" name="take_programmer" value="Add to DB">
         </div>
     </div>
     {{csrf_field()}}
@@ -104,14 +112,20 @@
                         {{$task->description}}
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label for="name">Task:</label>
-                    <select class="form-control" id="name" name="name">
+                    <select class="form-control" id="name" name="name{{$task->id}}">
                         <option>Task</option>
                         <option>Story</option>
                         <option>Bug</option>
                         <option>Epic</option>
                     </select>
+                </div>
+                <div class="col-md-1">
+                    <label for="select_task">Select:</label>
+                    <div>
+                        <input class="form-control check_task" type="checkbox" name="select_task{{$task->id}}" id="select_task" value="{{$task->id}}" >
+                    </div>
                 </div>
                 @endforeach
                 @endif
@@ -135,8 +149,6 @@
                     <div class="panel-body">
                         <div class="form-group">
                             <label for="create_project">Project:</label>
-                            {{--<input class="form-control" type="text" placeholder="project" id="create_project" name="create_project" value="{{$project->key}}">--}}
-
                             <select class="form-control" id="create_project" name="create_project">
                                 @if(isset($projects))
                                     @foreach($projects as $project)
@@ -180,7 +192,7 @@
         <div class="panel-body">
             <div class="form-group">
                 <label for="update_project">Project:</label>
-                <input class="form-control" type="text" placeholder="project" id="update_project" name="update_project">
+                <input class="form-control" type="text" placeholder="task" id="update_project" name="update_project">
             </div>
             <div class="form-group">
                 <label for="update_summary">Summary:</label>

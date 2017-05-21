@@ -6,6 +6,7 @@ class Programmer extends Model
 {
     //
     use Notifiable;
+
     protected $fillable = [
         'name','email',
     ];

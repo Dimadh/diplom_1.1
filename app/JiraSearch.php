@@ -20,7 +20,6 @@ class JiraSearch
         return $projetc;
     }
 
-
     private static function request( $request, $is_post = 0, $is_put = 0 )
     {
         $ch = curl_init();

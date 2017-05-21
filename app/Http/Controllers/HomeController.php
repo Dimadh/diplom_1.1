@@ -8,6 +8,8 @@ use App\Task;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\DB;
+
 class HomeController extends Controller
 {
     /**
@@ -44,25 +46,25 @@ class HomeController extends Controller
             'projects' => $response_project
         ];
 
-        $response =[];
+        $response =array();
         $response_1 = JiraProgrammer::search();
         for ($i = 0 ; $i < count($response_1) ;) {
-            $d = new class{};
-            $d->name = $response_1[$i];
-            $d->email = $response_1[$i + 1];
-
+            $d = new \stdClass();
+            {};
+                $d->name = $response_1[$i];
+                $d->email = $response_1[$i + 1];
+                $d->key = $response_1[$i + 2];
             array_push($response,$d);
-            $i = $i + 2;
-        //dd($response_1[$i]);
+            $i = $i + 3;
     }
-    dd($response);
         $data_Res = [
             'users' => $response
         ];
+
         $tasks = Task::select(['id','project','summary','description'])->get();
         return view('mainform' , $data_project , $data_Res)->with(['tasks'=> $tasks]);
-
     }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -88,39 +90,54 @@ class HomeController extends Controller
         $customer = new User();
         $customer->fill($data);
         $customer->save();
-        return redirect('/autorisation');
+        return redirect('/');
     }
 
-    public  function storer(Request $request)
+    /*public  function storer(Request $request)
     {
         $data = $request->all();
         $programmer = new Programmer();
         $programmer ->fill($data);
         $programmer ->save();
         return redirect('/' );
-    }
+    }*/
 
     public function storers(Request $request){
         $data = $request->all();
         $task = new Task();
         $task ->fill($data);
         $task ->save();
-        return redirect('/');
+        return redirect('/autorisation');
+    }
+
+    public function addProgrammer(Request $request){
+        $data = $request->all();
+            $programmer = new Programmer();
+            $programmer->fill($data);
+            $programmer->save();
+
+        return redirect('/task');
     }
 
     public  function send(Request $request){
         $data = $request->all();
-        $issue = Jira::create( array(
-            'project'     => array(
-                'key' => $request->project
-            ),
-            'summary'     => $request->summary,
-            'description' => $request->description ,
-            'issuetype'   => array(
-                'name' => $request->name
-            )
-        ) );
-        dd($issue);
+        for ($i = 1; $i <= (count($data)-2)/2 ;$i++) {
+        $projects= DB::table('tasks')->where('id',$data["select_task".$i])->get();
+        $projects_name= $projects[0]->project;
+        $projects_summary= $projects[0]->summary;
+        $projects_description= $projects[0]->description;
+        $projects_issue= $data["name".$i];
+            $issue = Jira::create(array(
+                'project' => array(
+                    'key' => $projects_name
+                ),
+                'summary' => $projects_summary,
+                'description' => $projects_description,
+                'issuetype' => array(
+                    'name' => $projects_issue
+                )
+            ));
+        }
         return redirect('/task');
     }
 
@@ -150,7 +167,7 @@ class HomeController extends Controller
         return redirect('/task');
     }
 
-    public function search(){
+    /*public function search(){
         $response = JiraProgrammer::search();
         $data_Res =[
             'users' => $response
@@ -163,7 +180,7 @@ class HomeController extends Controller
 
         $tasks = Task::select(['id','project','summary','description'])->get();
         return view ('mainform' , $data_Res, $data_project )->with(['tasks'=> $tasks]);
-    }
+    }*/
 
     /**
      * Display the specified resource.
