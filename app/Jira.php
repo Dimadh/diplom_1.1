@@ -29,6 +29,18 @@ class Jira
         return json_decode( $result );
 
     }
+
+    public static function createUser( array $data )
+    {
+
+        $data   = json_encode( array( 'fields' => $data ) );
+        $data = str_replace('\\\\','\\',$data);
+        dd($data);
+        $result = json_decode(self::request( 'user', $data, 1 ));
+        dd($result);
+        return  $result ;
+
+    }
     /**
      * Update function to change existing issue attributes
      *

@@ -82,10 +82,48 @@
         </div>
         <div class="form-group">
             <input class="btn btn-primary" type="submit" id="take_programmer" name="take_programmer" value="Add to DB">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Create User</button>
         </div>
     </div>
     {{csrf_field()}}
 </form>
+
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <form method="post" action="http://localhost/diplom_1.1/public/create_user" id="create_tasks" >
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Create Task</div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label for="user_name">User name:</label>
+                                <input class="form-control" type="text" placeholder="name" id="user_name" name="user_name">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="user_password">Password:</label>
+                            <input class="form-control" type="password" placeholder="password" id="user_password" name="user_password">
+                        </div>
+                        <div class="form-group">
+                            <label for="user_emailAddress">E-mail:</label>
+                            <input class="form-control" type="email" placeholder="E-mail" id="user_emailAddress" name="user_emailAddress">
+                        </div>
+                        <div class="form-group">
+                            <label for="user_displayName">Full name:</label>
+                            <input class="form-control" type="text" placeholder="full name" id="user_displayName" name="user_displayName">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input class="btn btn-primary" type="submit" id="create_user" name="create_user" value="Create User">
+                    </div>
+                </div>
+                {{csrf_field()}}
+            </form>
+        </div>
+    </div>
+</div>
 
 <form method="post" action="http://localhost/diplom_1.1/public/send_task" id="send_tasks" class="container-fluid">
     <div class="panel panel-primary">

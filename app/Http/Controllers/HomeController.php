@@ -122,22 +122,25 @@ class HomeController extends Controller
     public  function send(Request $request){
         $data = $request->all();
         for ($i = 1; $i <= (count($data)-2)/2 ;$i++) {
-        $projects= DB::table('tasks')->where('id',$data["select_task".$i])->get();
-        $projects_name= $projects[0]->project;
-        $projects_summary= $projects[0]->summary;
-        $projects_description= $projects[0]->description;
-        $projects_issue= $data["name".$i];
-            $issue = Jira::create(array(
-                'project' => array(
-                    'key' => $projects_name
-                ),
-                'summary' => $projects_summary,
-                'description' => $projects_description,
-                'issuetype' => array(
-                    'name' => $projects_issue
-                )
-            ));
-        }
+            if(!isset($data["select_task" . $i])){
+                $i++;
+            }
+                $projects = DB::table('tasks')->where('id', $data["select_task" . $i])->get();
+                $projects_name = $projects[0]->project;
+                $projects_summary = $projects[0]->summary;
+                $projects_description = $projects[0]->description;
+                $projects_issue = $data["name" . $i];
+                $issue = Jira::create(array(
+                    'project' => array(
+                        'key' => $projects_name
+                    ),
+                    'summary' => $projects_summary,
+                    'description' => $projects_description,
+                    'issuetype' => array(
+                        'name' => $projects_issue
+                    )
+                ));
+            }
         return redirect('/task');
     }
 
@@ -167,6 +170,22 @@ class HomeController extends Controller
         return redirect('/task');
     }
 
+    public function createUser(Request $request)
+    {
+        $data = $request->all();
+        //dd($data);
+        $users= Jira::createUser(array(
+            'name' => $request->user_name,
+            'password'=> $request->user_password,
+            'emailAddress'=> $request->user_emailAddress,
+            'displayName'=> $request->user_displayName,
+            'applicationKeys' => array(
+                "jira-core"
+            )
+        ));
+        dd($users);
+        return redirect('/task');
+    }
     /*public function search(){
         $response = JiraProgrammer::search();
         $data_Res =[
