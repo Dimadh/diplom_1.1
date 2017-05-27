@@ -1,6 +1,6 @@
 <?php
 return [
-    'url'      => 'http://localhost:8080',
-    'username' => 'Dima',
+    'url'      => 'https://imodul.atlassian.net/',
+    'username' => 'hanzhadima@gmail.com',
     'password' => 'oleg03041973',
 ];

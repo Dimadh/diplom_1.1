@@ -48,15 +48,18 @@ class HomeController extends Controller
 
         $response =array();
         $response_1 = JiraProgrammer::search();
-        for ($i = 0 ; $i < count($response_1) ;) {
-            $d = new \stdClass();
-            {};
-                $d->name = $response_1[$i];
-                $d->email = $response_1[$i + 1];
-                $d->key = $response_1[$i + 2];
-            array_push($response,$d);
-            $i = $i + 3;
-    }
+        $d = null;
+        foreach ($response_1 as $key => $val)
+            if($key%2 == 0) {
+                $d = new \stdClass();
+                {
+                };
+                $d->name = $val;
+            }else {
+                $d->email = $val;
+                array_push($response, $d);
+            }
+
         $data_Res = [
             'users' => $response
         ];
@@ -111,7 +114,7 @@ class HomeController extends Controller
     }
 
     public function addProgrammer(Request $request){
-        $data = $request->all();
+            $data = $request->all();
             $programmer = new Programmer();
             $programmer->fill($data);
             $programmer->save();

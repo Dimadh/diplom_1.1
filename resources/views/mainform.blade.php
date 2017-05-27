@@ -25,6 +25,9 @@
     #create_task{
         margin-left: 45%;
     }
+    #create_user{
+        margin-left: 45%;
+    }
 </style>
 <body data-spy="scroll" data-target=".navbar" data-offset="50">
 <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -82,13 +85,13 @@
         </div>
         <div class="form-group">
             <input class="btn btn-primary" type="submit" id="take_programmer" name="take_programmer" value="Add to DB">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Create User</button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal_user">Create User</button>
         </div>
     </div>
     {{csrf_field()}}
 </form>
 
-<div class="modal fade" id="myModal" role="dialog">
+<div class="modal fade" id="myModal_user" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
