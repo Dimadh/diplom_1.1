@@ -20,7 +20,7 @@ class Jira
      */
 
 
-    public static function create( array $data )
+    public static function createTask( array $data )
     {
 
         $data   = json_encode( array( 'fields' => $data ) );
@@ -48,7 +48,7 @@ class Jira
      * @param array $data
      * @return mixed
      */
-    public static function update( $issue, array $data )
+    public static function updateTask( $issue, array $data )
     {
         $data   = json_encode( array( 'fields' => $data ) );
         $data = str_replace('\\\\','\\',$data);

@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -37,17 +38,17 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#">Integration Module</a>
+        <a class="navbar-brand" href="#" style="font-style:italic" >IModule</a>
     </div>
     <div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav">
                 <li><a href="#take_programmers">Take Programmer</a></li>
                 <li><a href="#send_tasks">Send Task</a></li>
-                <li><a href="#update_tasks">Update</a></li>
+                <li><a href="#update_tasks">Update Task</a></li>
             </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="http://localhost/diplom_1.1/public/"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
+            <ul class="nav navbar-nav navbar-right ">
+                <li><a href="http://localhost/diplom_1.1/public/" style="margin-right: 8%"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
             </ul>
         </div>
     </div>
@@ -55,30 +56,28 @@
 <form method="post" action="http://localhost/diplom_1.1/public/take_prog" id="take_programmers" class="container-fluid" >
     <div class="panel panel-primary">
         <div class="panel-heading">Take Programmer</div>
-        <div class="panel-body">
-            <div class="row">
-            @if(isset($users))
-                @foreach($users as $user)
-            <div class="col-md-5">
-                <label>Name:</label>
-                <div>
-                {{$user->name}}
-                    <input type="hidden" name="name" value="{{$user->name}}">
-                </div>
-            </div>
-            <div class="col-md-6">
-                <label>Email:</label>
-                <div>
-                    {{$user->email}}
-                    <input type="hidden" name="email" value="{{$user->email}}">
-                </div>
-            </div>
-             <div class="col-md-1">
-                 <label for="select_programmer">Select:</label>
-                 <div>
-                    <input type="checkbox" class="form-control" name="select_programmer" id="select_programmer">
-                 </div>
-             </div>
+        <div class="panel-body" >
+            <div class="row" id="all_user">
+                @if(isset($users))
+                    @foreach($users as $user)
+                    <div class="dimasTopCoder">
+                        <div class="col-md-5 user">
+                                <label>Name:</label>
+                                <div class="displayName">{{$user->displayName}}</div>
+                        </div>
+
+                        <div class="col-md-6 user">
+                            <label>Email:</label>
+                                <div class="email">{{$user->email}}</div>
+                        </div>
+
+                         <div class="col-md-1">
+                             <label for="select_programmer">Select:</label>
+                             <div>
+                                <input type="checkbox" class="form-control" name="select_programmer" id="select_programmer" >
+                             </div>
+                         </div>
+                    </div>
                     @endforeach
                 @endif
         </div>
@@ -97,7 +96,7 @@
             <button type="button" class="close" data-dismiss="modal">&times;</button>
             <form method="post" action="http://localhost/diplom_1.1/public/create_user" id="create_tasks" >
                 <div class="panel panel-primary">
-                    <div class="panel-heading">Create Task</div>
+                    <div class="panel-heading">Create User</div>
                     <div class="panel-body">
                         <div class="form-group">
                             <div class="form-group">
@@ -259,6 +258,41 @@
     </div>
     {{csrf_field()}}
 </form>
+<script>
+
+    $("#take_programmer").click (function (e) {
+        e.preventDefault();
+        var user =  $( "input:checked" );
+        console.log(user);
+        var checkUser = [];
+        for (var i = 0 ; i < user.length;i++){
+            var parent = $(user[i]).closest(".dimasTopCoder");
+             obj = {
+                name : $($(parent[0]).find(".displayName")).html(),
+                email : $($(parent[0]).find(".email")).html()
+            };
+            checkUser.push(obj);
+            //console.log(checkUser);
+        }
+
+
+        var data = {
+            "_token": "{{ csrf_token() }}",
+            "dev": checkUser
+        };
+        console.log(data);
+        $.ajax({
+            type: "POST",
+            url: "http://localhost/diplom_1.1/public/task/take_prog",
+            data: data,
+            dataType: 'json',                    // тип загружаемых данных
+            success: function (data) { // вешаем свой обработчик на функцию success
+                console.log(data);
+            }
+        });
+
+    })
+</script>
 
 </body>
 </html>

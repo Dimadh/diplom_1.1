@@ -27,11 +27,14 @@ class JiraProgrammer
         foreach ($items as $item) {
             $result = json_decode(self::request('user/search?username=' . $item));
             foreach ($result as $add_result) {
-                    array_push($user, $add_result->name);
-                    array_push($user, $add_result ->emailAddress);
+                    array_push($user, $add_result->displayName);
+                    array_push($user, $add_result->emailAddress);
+                    //array_push($user, $add_result->active);
+                    //dd($result);
                 }
            }
         $concut_user = array_unique($user);
+        //dd($user);
         return $concut_user;
     }
 

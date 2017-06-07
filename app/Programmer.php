@@ -5,11 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 class Programmer extends Model
 {
     //
-    use Notifiable;
 
-    protected $fillable = [
-        'name','email',
-    ];
     /*protected $fillable = [
         'name','second_name','email','specialization','rank',
     ];*/
