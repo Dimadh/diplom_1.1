@@ -41,25 +41,27 @@ class HomeController extends Controller
 
     public function mainform(){
 
-        $response_project = JiraSearch::search();
+        $response_project = JiraSearch::searchProject();
         $data_project =[
             'projects' => $response_project
         ];
 
         $response =array();
-        $response_1 = JiraProgrammer::search();
+        $response_1 = JiraSearch::searchUser();
+        //dd($response_1);
         $d = null;
         foreach ($response_1 as $key => $val)
             if($key%2 == 0) {
                 $d = new \stdClass();
                 {
                 };
-                $d->name = $val;
+                $d->displayName = $val;
             }else {
                 $d->email = $val;
                 array_push($response, $d);
             }
 
+        //dd($response);
         $data_Res = [
             'users' => $response
         ];
@@ -114,26 +116,38 @@ class HomeController extends Controller
     }
 
     public function addProgrammer(Request $request){
-            $data = $request->all();
-            $programmer = new Programmer();
-            $programmer->fill($data);
-            $programmer->save();
 
-        return redirect('/task');
+        if ($request->isMethod('post')) {
+           foreach ($request->dev as $devs ) {
+                $programmer = new Programmer();
+                $programmer->name = $devs["name"];
+                $programmer->email = $devs["email"];
+                $programmer->save();
+           }
+        }
+        return response()->json(['response' => "1"]);
     }
 
     public  function send(Request $request){
         $data = $request->all();
+        //dd($data);
         for ($i = 1; $i <= (count($data)-2)/2 ;$i++) {
-            if(!isset($data["select_task" . $i])){
+            //$bol_for_stop = true;
+            while(!isset($data["select_task" . $i])){
+                //if($i >= (count($data)-2)/2)
+                    //$bol_for_stop = false;
+                    //break;
                 $i++;
             }
+            //if($bol_for_stop){
+                //break;
+            //}
                 $projects = DB::table('tasks')->where('id', $data["select_task" . $i])->get();
                 $projects_name = $projects[0]->project;
                 $projects_summary = $projects[0]->summary;
                 $projects_description = $projects[0]->description;
                 $projects_issue = $data["name" . $i];
-                $issue = Jira::create(array(
+                $issue = Jira::createTask(array(
                     'project' => array(
                         'key' => $projects_name
                     ),
@@ -149,7 +163,7 @@ class HomeController extends Controller
 
     public function createAndsend(Request $request){
         $data = $request->all();
-        $issue = Jira::create( array(
+        $issue = Jira::createTask( array(
             'project'     => array(
                 'key' => $request->create_project
             ),
@@ -163,7 +177,7 @@ class HomeController extends Controller
     }
 
     public function updatetask(Request $request){
-        Jira::update( $request->update_project, array(
+        Jira::updateTask( $request->update_project, array(
             'summary'     => $request->update_summary,
             'description' => $request->update_description,
             'issuetype'   => array(
