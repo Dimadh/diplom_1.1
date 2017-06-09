@@ -60,7 +60,7 @@
             <div class="row" id="all_user">
                 @if(isset($users))
                     @foreach($users as $user)
-                    <div class="dimasTopCoder">
+                    <div class="addUser">
                         <div class="col-md-5 user">
                                 <label>Name:</label>
                                 <div class="displayName">{{$user->displayName}}</div>
@@ -266,7 +266,7 @@
         console.log(user);
         var checkUser = [];
         for (var i = 0 ; i < user.length;i++){
-            var parent = $(user[i]).closest(".dimasTopCoder");
+            var parent = $(user[i]).closest(".addUser");
              obj = {
                 name : $($(parent[0]).find(".displayName")).html(),
                 email : $($(parent[0]).find(".email")).html()
