@@ -19,7 +19,7 @@ class JiraProgrammer
      * @param null $jql
      * @return mixed
      */
-    public static function search()
+    /*public static function search()
     {
         $items = array("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o",
                         "p","q","r","s","t","u","v","w","x","y","z");
@@ -36,7 +36,7 @@ class JiraProgrammer
         $concut_user = array_unique($user);
         //dd($user);
         return $concut_user;
-    }
+    }*/
 
 
     private static function request( $request, $is_post = 0, $is_put = 0 )

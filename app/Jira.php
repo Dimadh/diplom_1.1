@@ -33,12 +33,11 @@ class Jira
     public static function createUser( array $data )
     {
 
-        $data   = json_encode( array( 'fields' => $data ) );
+        $data = json_encode($data);
+
         $data = str_replace('\\\\','\\',$data);
-        //dd($data);
-        $result = json_decode(self::request( 'user', $data, 1 ));
-        //dd($result);
-        return  $result ;
+        $result = self::request( 'user', $data, 1 );
+        return json_decode($result) ;
 
     }
     /**
