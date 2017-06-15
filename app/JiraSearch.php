@@ -20,6 +20,15 @@ class JiraSearch
         return $projetc;
     }
 
+    public static function searchTask()
+    {
+        $type_task = array();
+        $result = json_decode(self::request( 'search' ));
+        foreach ($result->issues as $task_result)
+            array_push($type_task , $task_result);
+        return $type_task;
+    }
+
     public static function searchUser()
     {
         $items = array("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o",
@@ -34,7 +43,6 @@ class JiraSearch
             }
         }
         $concut_user = array_unique($user);
-        //dd($user);
         return $concut_user;
     }
 

@@ -1,7 +1,6 @@
 <?php
 namespace App\Http\Controllers;
 use App\Jira;
-use App\JiraProgrammer;
 use App\JiraSearch;
 use App\Programmer;
 use App\Task;
@@ -19,17 +18,27 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $data = [
-            'title' => 'Add',
-        ];
-        return view('index' , $data );
+
     }
 
     public function autorisation(){
         $data=[
             'title' => 'Autorisation',
+            'check' => true
+
         ];
         return view('autorisation' , $data);
+    }
+
+    public function check_autorisation(Request $request){
+        $data = $request->all();
+        $users = DB::table('users')->get();
+        foreach ($users as $user) {
+            if ($request->autorisation_email==$user->email && $request->autorisation_password==$user->password){
+            return $this->mainform();
+            }
+        }
+        return redirect('/');
     }
 
     public function registration(){
@@ -42,13 +51,14 @@ class HomeController extends Controller
     public function mainform(){
 
         $response_project = JiraSearch::searchProject();
+        $response_task = JiraSearch::searchTask();
         $data_project =[
-            'projects' => $response_project
+            'projects' => $response_project,
+            'type_tasks' => $response_task
         ];
-
         $response =array();
+
         $response_1 = JiraSearch::searchUser();
-        //dd($response_1);
         $d = null;
         foreach ($response_1 as $key => $val)
             if($key%2 == 0) {
@@ -60,8 +70,6 @@ class HomeController extends Controller
                 $d->email = $val;
                 array_push($response, $d);
             }
-
-        //dd($response);
         $data_Res = [
             'users' => $response
         ];
@@ -87,32 +95,12 @@ class HomeController extends Controller
      */
     public function store(Request $request)
     {
-        /*$customer->name = $request->name;
-        $customer->email = $request->email;
-        $customer->password = $request->password;
-        $customer->remember_token = $request->remember_token;*/
+
         $data = $request->all();
         $customer = new User();
         $customer->fill($data);
         $customer->save();
         return redirect('/');
-    }
-
-    /*public  function storer(Request $request)
-    {
-        $data = $request->all();
-        $programmer = new Programmer();
-        $programmer ->fill($data);
-        $programmer ->save();
-        return redirect('/' );
-    }*/
-
-    public function storers(Request $request){
-        $data = $request->all();
-        $task = new Task();
-        $task ->fill($data);
-        $task ->save();
-        return redirect('/autorisation');
     }
 
     public function addProgrammer(Request $request){
@@ -190,33 +178,15 @@ class HomeController extends Controller
     public function createUser(Request $request)
     {
         $data = $request->all();
-        //dd($data);
         $users= Jira::createUser(array(
             'name' => $request->user_name,
             'password'=> $request->user_password,
             'emailAddress'=> $request->user_emailAddress,
             'displayName'=> $request->user_displayName,
-            'applicationKeys' => array(
-                "jira-core"
-            )
         ));
-        dd($users);
+
         return redirect('/task');
     }
-    /*public function search(){
-        $response = JiraProgrammer::search();
-        $data_Res =[
-            'users' => $response
-        ];
-
-        $response_project = JiraSearch::search();
-        $data_project =[
-            'projects' => $response_project
-        ];
-
-        $tasks = Task::select(['id','project','summary','description'])->get();
-        return view ('mainform' , $data_Res, $data_project )->with(['tasks'=> $tasks]);
-    }*/
 
     /**
      * Display the specified resource.

@@ -232,7 +232,13 @@
         <div class="panel-body">
             <div class="form-group">
                 <label for="update_project">Project:</label>
-                <input class="form-control" type="text" placeholder="task" id="update_project" name="update_project">
+                <select class="form-control" id="create_project" name="create_project">
+                    @if(isset($type_tasks))
+                        @foreach($type_tasks as $type_task)
+                            <option>{{$type_task->key}}</option>
+                        @endforeach
+                    @endif
+                </select>
             </div>
             <div class="form-group">
                 <label for="update_summary">Summary:</label>
